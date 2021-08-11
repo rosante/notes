@@ -1,18 +1,18 @@
 package com.ruzzante.contentprovider
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.ClipDescription
-import android.content.ContentResolver
-import android.content.ContentValues
-import android.content.DialogInterface
+import android.content.*
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
+import com.google.android.material.textfield.TextInputEditText
 import com.ruzzante.contentprovider.database.NotesDatabaseHelper.Companion.DESCRIPTION_NOTES
 import com.ruzzante.contentprovider.database.NotesDatabaseHelper.Companion.TITLE_NOTES
 import com.ruzzante.contentprovider.database.NotesProvider.Companion.URI_NOTES
@@ -36,28 +36,27 @@ class NotesDetailFragment : DialogFragment(), DialogInterface.OnClickListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view: View? = activity?.layoutInflater?.inflate(R.layout.note_detail, null)
-        noteEditTitle = view?.findViewById(R.id.note_edt_title) as EditText
-        noteEditDescription = view?.findViewById(R.id.note_edt_description) as EditText
+        noteEditTitle = view?.findViewById(R.id.note_edt_title) as TextInputEditText
+        noteEditDescription = view.findViewById(R.id.note_edt_description) as TextInputEditText
 
         var newNote = true
         if (arguments != null && arguments?.getLong(EXTRA_ID) != 0L){
             id = arguments?.getLong(EXTRA_ID) as Long
-            var uri: Uri = Uri.withAppendedPath(URI_NOTES, id.toString())
+            var uri = Uri.withAppendedPath(URI_NOTES, id.toString())
             val cursor = activity?.contentResolver?.query(uri, null, null, null, null)
             if (cursor?.moveToNext() as Boolean){
                 newNote = false
                 noteEditTitle.setText(cursor.getString(cursor.getColumnIndex(TITLE_NOTES)))
                 noteEditDescription.setText(cursor.getString(cursor.getColumnIndex(DESCRIPTION_NOTES)))
-                cursor.close()
             }
-            return AlertDialog.Builder(activity as Activity)
-                .setTitle(if (newNote) "Nova Mensagem" else "Editar Mensagem")
-                .setView(view)
-                .setPositiveButton("Salvar", this)
-                .setNegativeButton("Cancelar", this)
-                .create()
+            cursor.close()
         }
-        return super.onCreateDialog(savedInstanceState)
+        return AlertDialog.Builder(activity as Activity)
+            .setTitle(if (newNote) "Nova Mensagem" else "Editar Mensagem")
+            .setView(view)
+            .setPositiveButton("Salvar", this)
+            .setNegativeButton("Cancelar", this)
+            .create()
     }
 
     override fun onClick(p0: DialogInterface?, p1: Int) {

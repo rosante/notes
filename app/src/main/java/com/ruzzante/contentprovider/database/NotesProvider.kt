@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.media.UnsupportedSchemeException
 import android.net.Uri
 import android.provider.BaseColumns._ID
+import android.util.Log
 import com.ruzzante.contentprovider.database.NotesDatabaseHelper.Companion.TABLE_NOTES
 
 class NotesProvider : ContentProvider() {
@@ -22,7 +23,7 @@ class NotesProvider : ContentProvider() {
         //Sempre que foi chamado nosso com.ruzzante.contentprovider.provider/notes ele deve trazer todas nossas notes
         mUriMatcher.addURI(AUTHORITY, "notes", NOTES)
         //Este vai ser chamado com o ID
-        mUriMatcher.addURI(AUTHORITY, "notes/#", NOTES)
+        mUriMatcher.addURI(AUTHORITY, "notes/#", NOTES_BY_ID)
         if (context != null) {dbHelper = NotesDatabaseHelper(context as Context) }
         return true
     }

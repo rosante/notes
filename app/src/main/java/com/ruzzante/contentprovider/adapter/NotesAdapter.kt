@@ -41,5 +41,5 @@ class NotesAdapter(private val listener:NoteClickedListener): RecyclerView.Adapt
 class NotesViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
     val noteTitle = itemView.findViewById(R.id.tv_note_title) as TextView
     val noteDescription = itemView.findViewById(R.id.tv_note_description) as TextView
-    val noteRemove = itemView.findViewById(R.id.btn_add) as Button
+    val noteRemove = itemView.findViewById(R.id.btn_note_remove) as Button
 }

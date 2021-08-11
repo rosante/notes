@@ -1,10 +1,12 @@
 package com.ruzzante.contentprovider
 
+import android.annotation.SuppressLint
 import android.database.Cursor
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.BaseColumns._ID
+import android.util.Log
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
 
         noteAdd = findViewById(R.id.btn_add)
         noteAdd.setOnClickListener{
-            NotesDetailFragment().show(supportFragmentManager, "dialog1")
+            NotesDetailFragment().show(supportFragmentManager, "dialog")
         }
 
         adapter = NotesAdapter(object: NoteClickedListener{
@@ -40,7 +42,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
             }
 
             override fun noteRemoveItem(cursor: Cursor?) {
-                val id : Long? = cursor?.getLong(cursor.getColumnIndex(_ID))
+                val id = cursor?.getLong(cursor.getColumnIndex(_ID))
                 contentResolver.delete(Uri.withAppendedPath(URI_NOTES, id.toString()), null, null)
             }
 
